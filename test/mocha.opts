@@ -3,4 +3,3 @@
 --growl
 --inline-diffs
 --recursive
---compilers coffee:coffee-script/register
