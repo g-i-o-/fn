@@ -12,6 +12,9 @@ Examples:
 1.) `this` context binding:
 
 ```javascript
+
+GLOBAL.name="global scope";
+GLOBAL.description="the default this context, harmless, but mostly unintented.";
 // a simple robot object
 var robot = {
     name : 'Robot',
@@ -19,19 +22,28 @@ var robot = {
     describeSelf: function(){
         console.log("Hello, my name is ", this.name, ", and I am ", this.description);
     }
-}
+};
 
 // the robot describes itself
 robot.describeSelf();
-// Output: Hello, my name is Robot, and I am a killing machine
 
 // the same thing
 fn.bind(robot.describeSelf, robot)();
-// Output: Hello, my name is Robot, and I am a killing machine
 
 // the same thing
 fn.bind(robot.describeSelf).ctx(robot)();
-// Output: Hello, my name is Robot, and I am a killing machine
+
+// binds to global scope by default
+fn.bind(robot.describeSelf)();
+
+/** Output:
+
+Hello, my name is  Robot , and I am  a killing machine
+Hello, my name is  Robot , and I am  a killing machine
+Hello, my name is  Robot , and I am  a killing machine
+Hello, my name is  global scope , and I am  the default this context, harmless, but mostly unintented.
+
+**/
 ```
 
 
@@ -43,10 +55,17 @@ function command(who, what, act, upon){
     console.log(who + " " + what + ": " + act + " " + upon);
 }
 
-var simonSays = fn.bind(say).lbind("Simon", "says");
-simonSays("Jump", "on one leg"); // Ouput: Simon says: jump on one leg
-simonSays("Spin", "around"); // Ouput: Simon says: spin around
+var simonSays = fn.bind(command).lbind("Simon", "says");
+simonSays("Jump", "on one leg");
+simonSays("Spin", "around");
 
+
+/** Output:
+
+Simon says: Jump on one leg
+Simon says: Spin around
+
+**/
 ```
 
 
@@ -58,9 +77,41 @@ function command(who, what, act, upon){
     console.log(who + " " + what + ": " + act + " " + upon);
 }
 
-var commandToJump = fn.bind(say).rbind("says", "Jump", "on one leg");
-commandToJump("Simon"); // Ouput: Simon says: jump on one leg
-commandToJump("Peter"); // Ouput: Peter says: jump on one leg
-commandToJump("Martha"); // Ouput: Martha says: jump on one leg
+var commandToJump = fn.bind(command).rbind("says", "Jump", "on one leg");
+commandToJump("Simon");
+commandToJump("Peter");
+commandToJump("Martha");
 
+/** Output:
+
+Simon says: Jump on one leg
+Peter says: Jump on one leg
+Martha says: Jump on one leg
+
+**/
+```
+
+## curry
+
+Makes a given function curriable. A curriable function of a given arity that collects their given arguments and return another curriable function, if the number of arguments is less than its arity, otherwise it runs its code.
+
+Example:
+
+```javascript
+
+function add(x, y){
+    return x + y;
+}
+
+var plus = fn.curry(add, 2);
+
+console.log( plus(5)(2) );
+console.log([1,2,3,4,5].map(plus(5)));
+
+/** Output:
+
+7
+[ 6, 7, 8, 9, 10 ]
+
+**/
 ```
