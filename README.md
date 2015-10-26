@@ -1,9 +1,9 @@
-# fn
+# fn-util
 Yes, Yet another functional library toolkit. This is just a collection of functional programming tools that I have used have been useful for me.
 
-![fn build status](https://travis-ci.org/g-i-o-/fn.svg)
-32
-1 ## bind
+![fn-util build status](https://travis-ci.org/g-i-o-/fn-util.svg)
+
+## bind
 Wraps a given function within a bound function that applies a given `this` context and any optional left and right arguments.
 
 Examples:
@@ -21,34 +21,24 @@ var robot = {
     }
 }
 
-// the robot describes itselfx 
+// the robot describes itselfx
 robot.describeSelf();
 // Output: Hello, my name is Robot, and I am a killing machine
 
 // the same thing
-fn.bind(robot, "describeSelf")();
+fn.bind(robot.describeSelf, robot)();
 // Output: Hello, my name is Robot, and I am a killing machine
-
-// the same thing
-fn.bind(robot, "describeSelf")();
-// Output: Hello, my name is Robot, and I am a killing machine
-
-
-var simonSays = fn.bind(say, null, ["Simon", "says"]);
-simonSays("Jump", "on one leg"); // Ouput: Simon says: jump on one leg
-simonSays("Spin", "around"); // Ouput: Simon says: spin around
-
 ```
 
 
-LEft binding
+Left binding
 ```javascript
 
 function command(who, what, act, upon){
     console.log(who + " " + what + ": " + act + " " + upon);
 }
 
-var simonSays = fn.bind(say, null, ["Simon", "says"]);
+var simonSays = fn.bind(say).lbind("Simon", "says");
 simonSays("Jump", "on one leg"); // Ouput: Simon says: jump on one leg
 simonSays("Spin", "around"); // Ouput: Simon says: spin around
 
