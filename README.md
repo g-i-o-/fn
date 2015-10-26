@@ -1,17 +1,17 @@
 # fn-util
-Yes, Yet another functional library toolkit. This is just a collection of functional programming tools that I have used have been useful for me.
+Yes, Yet another functional library toolkit. This is just a collection of functional programming tools that have been useful for me.
 
 ![fn-util build status](https://travis-ci.org/g-i-o-/fn-util.svg)
 
 ## bind
-Wraps a given function within a bound function that applies a given `this` context and any optional left and right arguments.
+
+Wraps a given function within a bound function that applies a given `this` context and any optional left and right arguments. Like `Function.bind`, it provides context and argument binding to a function. It also provides right argument binding and has a more readable binding API.
 
 Examples:
 
-`this` binding:
+1.) `this` context binding:
+
 ```javascript
-// the module scope
-var name="the module scope", description="the default this context";
 // a simple robot object
 var robot = {
     name : 'Robot',
@@ -21,17 +21,22 @@ var robot = {
     }
 }
 
-// the robot describes itselfx
+// the robot describes itself
 robot.describeSelf();
 // Output: Hello, my name is Robot, and I am a killing machine
 
 // the same thing
 fn.bind(robot.describeSelf, robot)();
 // Output: Hello, my name is Robot, and I am a killing machine
+
+// the same thing
+fn.bind(robot.describeSelf).ctx(robot)();
+// Output: Hello, my name is Robot, and I am a killing machine
 ```
 
 
-Left binding
+2.) Left argument binding
+
 ```javascript
 
 function command(who, what, act, upon){
@@ -45,17 +50,17 @@ simonSays("Spin", "around"); // Ouput: Simon says: spin around
 ```
 
 
+3.) Right argument binding
 
+```javascript
 
-removes packages and builds (node_modules, bower_components, public/assets)
+function command(who, what, act, upon){
+    console.log(who + " " + what + ": " + act + " " + upon);
+}
 
-`grunt clean`
+var commandToJump = fn.bind(say).rbind("says", "Jump", "on one leg");
+commandToJump("Simon"); // Ouput: Simon says: jump on one leg
+commandToJump("Peter"); // Ouput: Peter says: jump on one leg
+commandToJump("Martha"); // Ouput: Martha says: jump on one leg
 
-to run unit tests
-
-`grunt test`
-
-dependecy graphs (requires Graphviz installed)
-
-`grunt angular-depends` for frontend
-`npm run dep-graph` for backend (need npm package `madge`)
+```
